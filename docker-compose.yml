@@ -1,0 +1,34 @@
+version: "3.1"
+
+# services
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - sm-net
+    depends_on:
+      - db
+  db:
+    container_name: sm-mysql
+#    if your os is window, remove this line "platform: linux/x86_64"
+    platform: linux/x86_64
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=whale
+    ports:
+      - "3306:3306"
+    networks:
+      - sm-net
+    volumes:
+      - ./db:/var/lib/mysql
+
+# network
+networks:
+  sm-net:
+    driver: bridge
